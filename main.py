@@ -1,4 +1,7 @@
-import sys, shutil, os, subprocess, shlex, atexit
+import colorama
+colorama.init()
+
+import sys,getpass,shutil, os, subprocess, shlex, platform, atexit
 
 try:
   import readline
@@ -9,10 +12,29 @@ except ImportError:
   except ImportError:
     readline = None
 
+
+ASCII_LOGO = r"""
+
+┏┓         
+┃ ┓┏┏╋┏┓┏┳┓
+┗┛┗┻┛┗┗┛┛┗┗
+┏┓┓   ┓┓   
+┗┓┣┓┏┓┃┃   
+┗┛┛┗┗ ┗┗   
+           
+"""
+ESC = "\x1b"
+CLR = f"{ESC}[0m"       
+RED = f"{ESC}[0;31m"
+GRN = f"{ESC}[0;32m"
+YLW = f"{ESC}[0;33m"
+BLU = f"{ESC}[0;34m"
+CYN = f"{ESC}[0;36m"
+
 history_file = os.environ.get("HISTFILE")
 if not history_file:
   history_file = os.path.join(os.path.expanduser("~"), ".custom_shell_history")
-BUILTINS = ["exit", "type", "echo", "pwd", "cd", "history"]
+BUILTINS = ["exit", "type", "echo", "pwd", "cd", "history", "fetch"]
 
 if readline:
   if os.path.isfile(history_file):
@@ -46,9 +68,23 @@ def completer(txt, state):
     return options[state] + (" " if len(options) == 1 else "")
   return None
 
+def custom_prompt():
+  username = getpass.getuser()
+  host = platform.node().split('.')
+  cwd = os.getcwd().replace(os.path.expanduser("~"), "~")
+
+  prompt_str = (
+    f"\n"
+    f"[{GRN}{username}@{host}{CLR} {BLU}{cwd}{CLR}]"
+    f"\n"
+    f"{BLU}{username}{CLR} ▶ {YLW}{CLR}"
+  )
+  return prompt_str
+
 def handle_builtin(args, t_out, t_err):
   global history_checkpoint
   cmd = args[0]
+
 
   if cmd == "history":
     if readline:
@@ -98,6 +134,26 @@ def handle_builtin(args, t_out, t_err):
     else:
       t_err.write(f"history: not supported on this platform\n")
   
+  elif cmd == "fetch":
+    os_info = f"{platform.system()} {platform.release()} ({platform.version()})"
+    host_info = platform.node()
+    shell_info = "Custom Shell v1"
+    cpu_info = platform.processor()
+
+    logo_lines = ASCII_LOGO.strip().split('\n')
+    info_lines = [
+      f"OS:    {os_info}",
+      f"Host:  {host_info}",
+      f"Shell: {shell_info}",
+      f"CPU:   {cpu_info}",
+      f"User:  {os.environ.get('USER','N/A')}",
+    ]
+
+    max_len = max(len(s) for s in logo_lines) + 2
+    for i in range(max(len(logo_lines), len(info_lines))):
+      logo_part = (logo_lines[i] + ' ' * max_len)[:max_len] if i < len(logo_lines) else ' ' * max_len
+      info_part = info_lines[i] if i < len(info_lines) else ''
+      t_out.write(f"{logo_part}{info_part}\n")
   elif cmd == "echo":
     t_out.write(" ".join(args[1:]) + "\n")
   elif cmd == "pwd":
@@ -165,7 +221,7 @@ def main():
 
   while True:
     try:
-      line = input("$ ")
+      line = input(custom_prompt())
       if not line: break
       current_hist_len = readline.get_current_history_length()
       last_cmd = readline.get_history_item(current_hist_len)
