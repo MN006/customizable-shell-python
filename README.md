@@ -20,3 +20,6 @@ A lightweight, extensible, and fully customizable shell environment built entire
    ```bash
    git clone https://github.com/MN006/customizable-shell-python.git
    cd customizable-shell-python
+2. **Run the Shell**
+   ```bash
+   python main.py
