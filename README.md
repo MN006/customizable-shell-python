@@ -33,12 +33,11 @@ concerns.
 
 Clone the repository:
 
+```bash
+https://github.com/MN006/customizable-shell-python.git
+cd customizable-shell-python
 ```
-git clone https://github.com/yourusername/pyshell.git
-cd pyshell
-```
-##Usage
 Run the shell from the project root:
-```
+```bash
 python -m pysh.shell
 ```
