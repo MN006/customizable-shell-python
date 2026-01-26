@@ -33,10 +33,12 @@ concerns.
 
 Clone the repository:
 
-```bash
+```
 git clone https://github.com/yourusername/pyshell.git
 cd pyshell
-
+```
 ##Usage
-```bash
+Run the shell from the project root:
+```
 python -m pysh.shell
+```
