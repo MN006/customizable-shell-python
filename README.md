@@ -1,25 +1,42 @@
-# Customizable Shell in Python 🐍
+# pysh
 
-A lightweight, extensible, and fully customizable shell environment built entirely in Python. This project provides a terminal-like interface with support for built-in commands, external program execution, and user-defined configurations.
+A minimal Unix-like shell implemented in Python.
 
-## ✨ Features
-* **Built-in Commands**: Essential operations like `cd`, `pwd`, `echo`, and `exit`.
-* **External Execution**: Run system binaries and scripts found in your `PATH`.
-* **Customization**: Supports configuration via an RC file (e.g., `.pyzrc`) for custom prompts and themes.
-* **Command History**: Easily navigate through previous commands using the `readline` module.
-* **Error Handling**: Graceful feedback for invalid commands or directory issues.
+`pysh` provides an interactive command-line environment with built-in commands,
+command history, tab completion, colored prompt, and external command execution.
+It is designed with a clean internal architecture and clear separation of
+concerns.
 
-## 🚀 Getting Started
+---
 
-### Prerequisites
-* Python 3.x
-* Git
+## Features
 
-### Installation
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/MN006/customizable-shell-python.git
-   cd customizable-shell-python
-2. **Run the Shell**
-   ```bash
-   python main.py
+- Interactive shell with colored prompt
+- Built-in commands:
+  - `cd`, `pwd`, `echo`, `type`, `history`, `fetch`, `exit`
+- Persistent command history
+- Tab completion for commands and files
+- External command execution via system `PATH`
+- Modular, extensible codebase
+
+---
+
+## Requirements
+
+- Python 3.9+
+- Unix-like system for pipeline support  
+  (Windows is supported **without pipelines**)
+
+---
+
+## Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/yourusername/pyshell.git
+cd pyshell
+
+##Usage
+```bash
+python -m pysh.shell
